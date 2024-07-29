@@ -10,7 +10,7 @@ const API_KEY = process.env.REACT_APP_NEWS_API; // Update this line
 
 // Use CORS middleware and specify the allowed origin
 app.use(cors({
-    origin: 'https://news-daily-m8q6.vercel.app/', // Allow requests from your React app
+    origin: 'https://news-daily-m8q6.vercel.app', // Allow requests from your React app
 }));
 
 app.get('/api/news', async (req, res) => {
