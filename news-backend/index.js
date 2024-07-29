@@ -9,7 +9,9 @@ const API_KEY = process.env.REACT_APP_NEWS_API; // Update this line
  // Use your API key from .env
 
 // Use CORS middleware and specify the allowed origin
-app.use(cors()); // Enable preflight for all routes
+app.use(cors({
+    origin: 'news-daily-m8q6.vercel.app/:1', // Allow requests from your React app
+})); // Enable preflight for all routes
 app.use((req, res, next) => {
     console.log(`Received request from ${req.get('origin')}`);
     next();
