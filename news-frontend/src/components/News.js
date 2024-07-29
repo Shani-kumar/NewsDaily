@@ -262,7 +262,7 @@ export default class News extends Component {
 
 
     fetchNews = async () => {
-        let url = `http://localhost:5001/api/news?searchQuery=${this.props.searchQuery}&country=${this.props.country}&category=${this.props.category}&page=${this.state.page}&pageSize=${this.props.pageSize}`;
+        let url = `https://news-daily-delta.vercel.app/api/news?searchQuery=${this.props.searchQuery}&country=${this.props.country}&category=${this.props.category}&page=${this.state.page}&pageSize=${this.props.pageSize}`;
         try {
             let response = await fetch(url);
             
