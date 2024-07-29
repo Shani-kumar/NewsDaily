@@ -264,7 +264,7 @@ export default class News extends Component {
     fetchNews = async () => {
         let url = `https://news-daily-delta.vercel.app/api/news?searchQuery=${this.props.searchQuery}&country=${this.props.country}&category=${this.props.category}&page=${this.state.page}&pageSize=${this.props.pageSize}`;
         try {
-            let response = await fetch(url);
+            let response = await fetch(url,{ mode: 'no-cors' });
             
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
