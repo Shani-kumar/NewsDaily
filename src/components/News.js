@@ -223,31 +223,41 @@ export default class News extends Component {
         } else {
             url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.props.apikey}&page=${this.state.page}&pageSize=${this.props.pageSize}`;
         }
-        let data = await fetch(url);
-        let parsedData = await data.json();
-        
-        // Filter articles where urlToImage is not null
-        let articlesWithImage = parsedData.articles.filter(article => article.urlToImage !== null);
-        
-        // Check if we have fewer than 16 articles with images
-        if (articlesWithImage.length < 16) {
-            // Get articles with urlToImage null
-            let articlesWithoutImage = parsedData.articles.filter(article => article.urlToImage === null);
-        
-            // Calculate how many more articles we need to reach 20
-            let remainingCount = 20 - articlesWithImage.length;
-        
-            // Add enough articles without images to make up the difference
-            articlesWithImage = articlesWithImage.concat(articlesWithoutImage.slice(0, remainingCount));
+        try {
+            let data = await fetch(url);
+            let parsedData = await data.json();
+            
+            // Ensure articles is defined and is an array
+            if (!parsedData.articles || !Array.isArray(parsedData.articles)) {
+                console.error('Invalid articles data', parsedData);
+                return;
+            }
+            
+            // Filter articles where urlToImage is not null
+            let articlesWithImage = parsedData.articles.filter(article => article.urlToImage !== null);
+            
+            // Check if we have fewer than 16 articles with images
+            if (articlesWithImage.length < 16) {
+                // Get articles with urlToImage null
+                let articlesWithoutImage = parsedData.articles.filter(article => article.urlToImage === null);
+            
+                // Calculate how many more articles we need to reach 20
+                let remainingCount = 20 - articlesWithImage.length;
+            
+                // Add enough articles without images to make up the difference
+                articlesWithImage = articlesWithImage.concat(articlesWithoutImage.slice(0, remainingCount));
+            }
+            
+            // Ensure we have exactly 20 articles (if fewer were fetched overall)
+            articlesWithImage = articlesWithImage.slice(0, 20);
+            
+            this.setState({
+                articles: articlesWithImage,
+                totalResults: parsedData.totalResults
+            });
+        } catch (error) {
+            console.error('Error fetching news:', error);
         }
-        
-        // Ensure we have exactly 20 articles (if fewer were fetched overall)
-        articlesWithImage = articlesWithImage.slice(0, 20);
-        
-        this.setState({
-            articles: articlesWithImage,
-            totalResults: parsedData.totalResults
-        });
     }
 
     handlePrev = async () => {
