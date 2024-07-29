@@ -13,6 +13,10 @@ app.use(cors({
     origin: 'https://news-daily-m8q6.vercel.app', // Allow requests from your React app
 }));
 app.options('*', cors()); // Enable preflight for all routes
+app.use((req, res, next) => {
+    console.log(`Received request from ${req.get('origin')}`);
+    next();
+});
 
 app.get('/api/news', async (req, res) => {
     console.log(API_KEY);
